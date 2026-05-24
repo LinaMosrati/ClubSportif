@@ -14,7 +14,7 @@ import javafx.scene.control.DateCell;
 
 public class MembreFormView {
 
-    public void show(Stage stage) {
+	public VBox createFormContent(Runnable onSuccess)  {
 
         Label title = new Label("Créer un compte membre");
         title.getStyleClass().add("page-title");
@@ -182,7 +182,8 @@ public class MembreFormView {
         GridPane form = new GridPane();
         form.setHgap(12);
         form.setVgap(4);
-        form.setPadding(new Insets(25));
+        form.setPadding(new Insets(35));
+        form.setMaxWidth(620);
         form.getStyleClass().add("form-card");
 
         form.add(new Label("Login"), 0, 0);
@@ -268,6 +269,10 @@ public class MembreFormView {
                     emailField.clear();
                     poidsField.clear();
                     dateNaissancePicker.setValue(null);
+
+                    if (onSuccess != null) {
+                        onSuccess.run();
+                    }
                 }
             } catch (Exception ex) {
                 messageLabel.setText("Vérifiez les champs saisis ❌");
@@ -275,24 +280,29 @@ public class MembreFormView {
             }
         });
 
-        Button retourBtn = new Button("Retour dashboard");
-        retourBtn.setOnAction(e -> {
-            AdminDashboardView dashboard = new AdminDashboardView();
-            dashboard.show(stage);
-        });
-
+  
         VBox root = new VBox(20);
         root.setPadding(new Insets(40));
         root.setAlignment(Pos.TOP_CENTER);
-        root.getChildren().addAll(title, form, retourBtn);
-
-        Scene scene = new Scene(root, 900, 700);
-        scene.getStylesheets().add(
-                getClass().getResource("/resources/style.css").toExternalForm()
-        );
-
-        stage.setTitle("Créer membre - OmniSport");
-        stage.setScene(scene);
-        stage.show();
+        root.getChildren().addAll(title, form);
+        
+        return root;
     }
+	
+	public void show(Stage stage) {
+
+	    VBox root = createFormContent(null);
+
+	    Scene scene = new Scene(root, 900, 700);
+
+	    scene.getStylesheets().add(
+	            getClass().getResource("/resources/style.css").toExternalForm()
+	    );
+
+	    stage.setTitle("Créer membre - OmniSport");
+
+	    stage.setScene(scene);
+
+	    stage.show();
+	}
 }

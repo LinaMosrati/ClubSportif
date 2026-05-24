@@ -73,4 +73,11 @@ public class ValidationUtil {
 
         return true;
     }
+    
+    public static boolean heureValide(String heure) {
+
+        return heure.matches(
+                "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+        );
+    }
 }

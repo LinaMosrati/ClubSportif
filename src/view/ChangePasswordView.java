@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import view.MemberDashboardView;
 
 public class ChangePasswordView {
 
@@ -55,6 +56,10 @@ public class ChangePasswordView {
                     );
             messageLabel.setText(resultat);
 
+            if (resultat.contains("succès")) {
+                MemberDashboardView memberView = new MemberDashboardView();
+                memberView.show(stage, login);
+            }
             if (resultat.contains("succès")) {
 
                 newPasswordField.clear();

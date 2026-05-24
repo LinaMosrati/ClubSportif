@@ -101,4 +101,56 @@ public class MembreController {
 
         return "Erreur inconnue ❌";
     }
+    
+    
+    
+    public java.util.List<Membre> getAllMembres() {
+        return membreDao.getAllMembres();
+    }
+
+    public boolean supprimerMembre(int id, String login) {
+        return membreDao.supprimerMembre(id, login);
+    }
+
+    public String modifierMembre(Membre membre) {
+
+        if (
+                ValidationUtil.estVide(membre.getNom())
+                || ValidationUtil.estVide(membre.getPrenom())
+                || ValidationUtil.estVide(membre.getDateNaissance())
+                || ValidationUtil.estVide(membre.getAdresse())
+                || ValidationUtil.estVide(membre.getTelephone())
+                || ValidationUtil.estVide(membre.getEmail())
+        ) {
+            return "Tous les champs sont obligatoires ❌";
+        }
+
+        if (!ValidationUtil.nomValide(membre.getNom())) {
+            return "Nom invalide ❌";
+        }
+
+        if (!ValidationUtil.nomValide(membre.getPrenom())) {
+            return "Prénom invalide ❌";
+        }
+
+        if (!ValidationUtil.telephoneValide(membre.getTelephone())) {
+            return "Téléphone invalide ❌";
+        }
+
+        if (!ValidationUtil.emailValide(membre.getEmail())) {
+            return "Email invalide ❌";
+        }
+
+        if (!ValidationUtil.poidsValide(String.valueOf(membre.getPoids()))) {
+            return "Poids invalide ❌";
+        }
+
+        boolean success = membreDao.modifierMembre(membre);
+
+        if (success) {
+            return "Membre modifié avec succès ✅";
+        }
+
+        return "Erreur modification ❌";
+    }
 }

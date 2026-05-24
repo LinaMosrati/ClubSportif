@@ -1,6 +1,8 @@
 package view;
 
 import view.MembreFormView;
+import javafx.scene.control.ScrollPane;
+import controller.AdminController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,46 +15,13 @@ public class AdminDashboardView {
 
     public void show(Stage stage) {
 
-        // =========================
-        // TOP BAR
-        // =========================
+    	HBox topBar = Navbar.create(stage, "accueil");
+    	
+    	AdminController controller = new AdminController();
 
-        HBox topBar = new HBox(30);
-
-        topBar.setPadding(new Insets(20));
-
-        topBar.getStyleClass().add("topbar");
-
-        Label logo = new Label("🏆 OmniSport");
-
-        logo.getStyleClass().add("logo");
-
-        Button accueilBtn = new Button("Accueil");
-
-        Button membresBtn = new Button("Membres");
-        
-        membresBtn.setOnAction(e -> {
-            MembreFormView membreFormView = new MembreFormView();
-            membreFormView.show(stage);
-        });
-
-        Button activitesBtn = new Button("Activités");
-
-        Button financesBtn = new Button("Finances");
-
-        accueilBtn.getStyleClass().add("nav-button");
-        membresBtn.getStyleClass().add("nav-button");
-        activitesBtn.getStyleClass().add("nav-button");
-        financesBtn.getStyleClass().add("nav-button");
-
-        topBar.getChildren().addAll(
-                logo,
-                accueilBtn,
-                membresBtn,
-                activitesBtn,
-                financesBtn
-        );
-
+    	int nbMembres = controller.getNombreMembres();
+    	int nbActivites = controller.getNombreActivites();
+    	int tauxRemplissage = controller.getTauxRemplissage();
         // =========================
         // SIDEBAR
         // =========================
@@ -100,53 +69,127 @@ public class AdminDashboardView {
         // CONTENT
         // =========================
 
-        VBox content = new VBox(25);
+        VBox content = new VBox(22);
 
-        content.setPadding(new Insets(30));
+        content.setPadding(
+                new Insets(
+                        20,
+                        40,
+                        30,
+                        40
+                )
+        );
 
-        Label welcome = new Label("Bonjour Administrateur 👋");
+        content.getStyleClass()
+        .add("dashboard-content");
 
+        VBox hero = new VBox(8);
+
+        hero.getStyleClass()
+        .add("hero-panel");
+
+        Label welcome =
+        new Label(
+        "Bonjour Administrateur 👋"
+        );
+
+        welcome.getStyleClass()
+        .add("hero-title");
+
+        Label sub =
+        new Label(
+        "Salle active • Gestion intelligente"
+        );
+
+        sub.getStyleClass()
+        .add("hero-sub");
+
+        hero.getChildren()
+        .addAll(
+        welcome,
+        sub
+        );
         welcome.getStyleClass().add("welcome-title");
 
-        HBox stats = new HBox(20);
+        GridPane stats =
+        		new GridPane();
 
-        VBox card1 = createCard("248", "Membres");
+        		stats.setHgap(22);
 
-        VBox card2 = createCard("14", "Activités");
+        		stats.add(
+        		createCard(
+        		String.valueOf(nbMembres),
+        		"👥 Membres"
+        		),
+        		0,
+        		0
+        		);
 
-        VBox card3 = createCard("92%", "Remplissage");
+        		stats.add(
+        		createCard(
+        		String.valueOf(nbActivites),
+        		"🏃 Activités"
+        		),
+        		1,
+        		0
+        		);
+
+        		stats.add(
+        		createCard(
+        		tauxRemplissage+"%",
+        		"📈 Remplissage"
+        		),
+        		2,
+        		0
+        		);
+
+        		stats.add(
+        		createCard(
+        		"12",
+        		"📦 Archives"
+        		),
+        		3,
+        		0
+        		);
+        VBox card1 = createCard(String.valueOf(nbMembres), "Membres");
+        VBox card2 = createCard(String.valueOf(nbActivites), "Activités");
+        VBox card3 = createCard(tauxRemplissage + "%", "Remplissage");
 
         stats.getChildren().addAll(card1, card2, card3);
 
-        HBox activities = new HBox(20);
+        java.util.List<model.Activite> activites =
+                controller.getDashboardActivites();
 
-        VBox natation = createActivityCard(
-                "Natation",
-                "18 / 20"
-        );
+        FlowPane activities = new FlowPane();
+        activities.setHgap(20);
+        activities.setVgap(20);
+        activities.setPrefWrapLength(1000);
+        
+        for (model.Activite activite : activites) {
 
-        VBox yoga = createActivityCard(
-                "Yoga",
-                "11 / 15"
-        );
+            VBox card = createActivityCard(
+                    activite.getNom(),
+                    activite.getParticipants() + " / " + activite.getCapaciteMax()
+            );
 
-        VBox muscu = createActivityCard(
-                "Musculation",
-                "25 / 25"
-        );
+            activities.getChildren().add(card);
+        }
 
-        activities.getChildren().addAll(
-                natation,
-                yoga,
-                muscu
-        );
+        Label section =
+        		new Label(
+        		"Activités populaires"
+        		);
 
-        content.getChildren().addAll(
-                welcome,
-                stats,
-                activities
-        );
+        		section.getStyleClass()
+        		.add("section-title");
 
+        		content.getChildren()
+        		.addAll(
+        		hero,
+        		stats,
+        		section,
+        		activities
+        		);
         // =========================
         // ROOT
         // =========================
@@ -157,7 +200,28 @@ public class AdminDashboardView {
 
         root.setLeft(sideBar);
 
-        root.setCenter(content);
+        ScrollPane scroll = new ScrollPane();
+
+        scroll.setContent(content);
+
+        scroll.setFitToWidth(true);
+
+        scroll.setFitToHeight(false);
+
+        scroll.setPannable(true);
+
+        scroll.setHbarPolicy(
+                ScrollPane.ScrollBarPolicy.NEVER
+        );
+
+        scroll.setVbarPolicy(
+                ScrollPane.ScrollBarPolicy.AS_NEEDED
+        );
+
+        scroll.getStyleClass()
+        .add("dashboard-scroll");
+
+        root.setCenter(scroll);
 
         Scene scene = new Scene(root, 1400, 800);
 
@@ -168,6 +232,7 @@ public class AdminDashboardView {
         stage.setTitle("OmniSport Dashboard");
 
         stage.setScene(scene);
+        stage.setMaximized(true);
 
         stage.show();
     }
