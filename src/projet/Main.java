@@ -2,6 +2,8 @@ package projet;
 
 
 import view.ChangePasswordView;
+
+import view.MemberDashboardView;
 import dao.UserDAO;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -73,9 +75,8 @@ public class Main extends Application {
 
                 } else {
 
-                    messageLabel.setText(
-                            "Connexion membre réussie ✅"
-                    );
+                	MemberDashboardView memberView = new MemberDashboardView();
+                	memberView.show(stage, login);
                 }
             }
         });
