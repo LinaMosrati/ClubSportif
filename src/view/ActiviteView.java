@@ -31,7 +31,8 @@ public class ActiviteView {
             "11:00 à 12:30",
             "12:30 à 14:00",
             "14:00 à 15:30",
-            "15:30 à 17:00"
+            "15:30 à 17:00",
+            "17:30 à 19:00"
     };
 
     public void show(Stage stage) {

@@ -45,6 +45,62 @@ public class UserDAO {
         return null;
     }
     
+    public boolean verifierCode(
+
+    		String login,
+
+    		String code
+
+    		){
+
+    		try{
+
+    		Connection c=
+    		DBConnection
+    		.getConnection();
+
+    		PreparedStatement ps=
+    		c.prepareStatement(
+
+    		"""
+    		UPDATE users
+
+    		SET
+    		email_verifie=1
+
+    		WHERE
+
+    		login=?
+
+    		AND
+
+    		code_verification=?
+    		"""
+    		);
+
+    		ps.setString(
+    		1,
+    		login
+    		);
+
+    		ps.setString(
+    		2,
+    		code
+    		);
+
+    		return
+    		ps.executeUpdate()>0;
+
+    		}
+
+    		catch(Exception e){
+
+    		return false;
+
+    		}
+
+    		}
+    
     public boolean changerMotDePasse(String login, String nouveauMotDePasse) {
 
         String sql =

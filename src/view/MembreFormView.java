@@ -16,8 +16,7 @@ public class MembreFormView {
 
 	public VBox createFormContent(Runnable onSuccess)  {
 
-        Label title = new Label("Créer un compte membre");
-        title.getStyleClass().add("page-title");
+    
 
         TextField loginField = new TextField();
         PasswordField passwordField = new PasswordField();
@@ -284,16 +283,38 @@ public class MembreFormView {
         VBox root = new VBox(20);
         root.setPadding(new Insets(40));
         root.setAlignment(Pos.TOP_CENTER);
-        root.getChildren().addAll(title, form);
+        root.getChildren().addAll(form);
         
         return root;
     }
 	
 	public void show(Stage stage) {
 
-	    VBox root = createFormContent(null);
+		VBox content =
+		        createFormContent(null);
 
-	    Scene scene = new Scene(root, 900, 700);
+		ScrollPane scroll =
+		        new ScrollPane(content);
+
+		scroll.setFitToWidth(true);
+
+		scroll.setPannable(true);
+
+		scroll.setHbarPolicy(
+		        ScrollPane.ScrollBarPolicy.NEVER
+		);
+
+		scroll.getStyleClass()
+		.add(
+		        "custom-scroll"
+		);
+
+		Scene scene =
+		        new Scene(
+		                scroll,
+		                900,
+		                700
+		        );
 
 	    scene.getStylesheets().add(
 	            getClass().getResource("/resources/style.css").toExternalForm()

@@ -4,6 +4,7 @@ public class User {
 
     private String role;
     private boolean premiereConnexion;
+    private boolean emailVerifie;
 
     public User(
             String role,
@@ -20,5 +21,8 @@ public class User {
 
     public boolean isPremiereConnexion() {
         return premiereConnexion;
+    }
+    public boolean isEmailVerifie() {
+        return emailVerifie;
     }
 }

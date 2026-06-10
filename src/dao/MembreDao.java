@@ -3,7 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+import util.EmailService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,22 +21,77 @@ public class MembreDao {
         """;
 
         String sqlUser = """
-        	    INSERT INTO users(
-        	        login,
-        	        mot_de_passe,
-        	        role,
-        	        premiere_connexion
-        	    )
-        	    VALUES (?, ?, 'MEMBRE', TRUE)
+        	  INSERT INTO users(
+login,
+mot_de_passe,
+role,
+premiere_connexion,
+email_verifie,
+code_verification
+)
+VALUES(
+?,
+?,
+'MEMBRE',
+TRUE,
+FALSE,
+?
+)
         	""";
 
         try {
-            Connection conn = DBConnection.getConnection();
 
-            PreparedStatement psUser = conn.prepareStatement(sqlUser);
-            psUser.setString(1, membre.getLogin());
-            psUser.setString(2, membre.getMotDePasse());
+            Connection conn =
+                    DBConnection.getConnection();
+
+            String code =
+                    String.valueOf(
+
+                            (int)
+
+                            (
+                                    100000
+                                    +
+                                    Math.random()
+                                    *
+                                    900000
+                            )
+                    );
+
+            PreparedStatement psUser =
+                    conn.prepareStatement(
+                            sqlUser
+                    );
+
+            psUser.setString(
+                    1,
+                    membre.getLogin()
+            );
+
+            psUser.setString(
+                    2,
+                    membre.getMotDePasse()
+            );
+
+            psUser.setString(
+                    3,
+                    code
+            );
+
             psUser.executeUpdate();
+
+            EmailService.envoyerCode(
+
+                    membre.getEmail(),
+
+                    membre.getLogin(),
+
+                    membre.getMotDePasse(),
+
+                    code
+            );
+
+        
 
             PreparedStatement psMembre = conn.prepareStatement(sqlMembre);
             psMembre.setString(1, membre.getLogin());

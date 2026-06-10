@@ -116,6 +116,8 @@ public class MemberActivitiesView {
 
         return !maintenant.isBefore(debutAutorise)
                 && maintenant.isBefore(heureDebut);
+           
+      
     }
 
     private void chargerPlanning(String login) {

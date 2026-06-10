@@ -4,6 +4,7 @@ package projet;
 import view.ChangePasswordView;
 
 import view.MemberDashboardView;
+import view.VerifyCodeView;
 import dao.UserDAO;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -65,7 +66,19 @@ public class Main extends Application {
             else if (
                     user.getRole().equals("MEMBRE")
             ) {
+            	if(
+            			!user.isEmailVerifie()
+            			){
 
+            			new VerifyCodeView()
+            			.show(
+            			stage,
+            			login
+            			);
+
+            			return;
+
+            			}
                 if (user.isPremiereConnexion()) {
 
                     ChangePasswordView view =

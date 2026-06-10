@@ -51,5 +51,9 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="src/lib/angus-activation-2.0.2.jar"/>
+	<classpathentry kind="lib" path="src/lib/angus-mail-2.0.2.jar"/>
+	<classpathentry kind="lib" path="src/lib/jakarta.mail-2.0.2.jar"/>
+	<classpathentry kind="lib" path="src/lib/jakarta.activation-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
